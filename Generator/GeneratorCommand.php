@@ -217,9 +217,11 @@ abstract class GeneratorCommand extends Command
 
     protected function getFilePath($path): string
     {
+        // Check if Custom Generator generates another file type (e.g Component.vue, store.js), leave php as default
+        $ext = !strlen(pathinfo($path, PATHINFO_EXTENSION)) ? $this->getDefaultFileExtension() : '';
+
         // Complete the missing parts of the path
-        $path = base_path() . '/' .
-            str_replace('\\', '/', self::ROOT . '/' . $path) . '.' . $this->getDefaultFileExtension();
+        $path = base_path() . '/' . str_replace('\\', '/', self::ROOT . '/' . $path) . $ext;
 
         // Try to create directory
         $this->createDirectory($path);
